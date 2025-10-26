@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 function connectDB(){
     // Add database name and connection options
-    mongoose.connect("mongodb://localhost:27017/food-view?family=4") 
+    mongoose.connect(process.env.MONGODB_URI) 
    .then(()=>{
         console.log("MongoDB connected successfully");
     })
