@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const foodSchema = new mongosse.Schema({
+const foodSchema = new mongoose.Schema({
     name:{
         type:String,
         required:true
@@ -13,7 +13,7 @@ const foodSchema = new mongosse.Schema({
         type:String,
     },
     foodPartner:{
-        type: mongoose.Schema.Types.ObjectId;
+        type: mongoose.Schema.Types.ObjectId,
         ref: "foodpartner"
     }
 
