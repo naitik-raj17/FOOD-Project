@@ -1,4 +1,4 @@
-const Imagekit = require("@imagekit/nodejs");
+const Imagekit = require("imagekit");
 
 const imagekit = new Imagekit({
     publicKey: process.env.IMAGEKIT_PUBLIC_KEY,

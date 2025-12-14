@@ -17,6 +17,9 @@ const foodSchema = new mongoose.Schema({
         ref: "foodpartner"
     }
 
+},
+{
+    timestamps: true
 })
 
 const foodModel = mongoose.model("food",foodSchema);

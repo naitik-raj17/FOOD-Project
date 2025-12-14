@@ -1,19 +1,46 @@
 const foodModel = require('../models/food.model');
 const storageService = require('../services/storage.services');
-const { v4:uuid} = require("uuid")
- 
+const { v4: uuid } = require("uuid")
+
 async function createFood(req, res) {
     try {
         console.log(req.foodPartner);
         console.log(req.body);
         console.log(req.file);
 
-        const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid());
+        if (!req.file) {
+            return res.status(400).json({ message: "No video file uploaded or invalid file type" });
+        }
+
+        const { name, description } = req.body;
+        if (!name) {
+            return res.status(400).json({ message: "Food name is required" });
+        }
+
+        const extension = req.file.originalname.split('.').pop();
+        const fileName = `${uuid()}.${extension}`;
+        const fileUploadResult = await storageService.uploadFile(req.file.buffer, fileName);
         console.log(fileUploadResult);
-        res.send("food item created");
+
+        const food = await foodModel.create({
+            name,
+            video: fileUploadResult.url,
+            description,
+            foodPartner: req.foodPartner._id
+        });
+
+        res.status(201).json({
+            message: "Food item created successfully",
+            food: {
+                _id: food._id,
+                name: food.name,
+                video: food.video,
+                description: food.description
+            }
+        });
     } catch (error) {
         console.error('Error creating food item:', error);
-        res.status(500).send("Error creating food item");
+        res.status(500).json({ message: "Error creating food item" });
     }
 }
 
