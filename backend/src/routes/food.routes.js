@@ -33,7 +33,7 @@ const handleMulterError = (err, req, res, next) => {
 
 router.post('/',
     authMiddleware.authFoodPartnerMiddleware,
-    upload.single("video"),
+    upload.single("mama"),
     handleMulterError,
     foodController.createFood)
 
