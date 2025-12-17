@@ -1,9 +1,12 @@
 const foodModel = require('../models/food.model');
-const storageService = require('../services/storage.services');
 const { v4: uuid } = require("uuid")
+const storageService = require('../services/storage.services');
+
 
 async function createFood(req, res) {
     try {
+        
+        
         console.log(req.foodPartner);
         console.log(req.body);
         console.log(req.file);
@@ -44,13 +47,18 @@ async function createFood(req, res) {
     }
 }
 
-async function getFoodItems(req,res){
-    const foodItems = await foodModel.find({})
+async function getFoodItems(req, res) {
+    try {
+        const foodItems = await foodModel.find({});
 
-    res.status(200).json({
-        message: "Food items fetched successfully",
-        foodItems
-    })
+        res.status(200).json({
+            message: "Food items fetched successfully",
+            foodItems
+        });
+    } catch (error) {
+        console.error('Error fetching food items:', error);
+        res.status(500).json({ message: "Error fetching food items" });
+    }
 }
 
 module.exports = {
