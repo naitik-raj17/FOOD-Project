@@ -7,14 +7,14 @@ import PartnerRegister from '../pages/PartnerRegister'
 
 const AppRoutes = () => {
   return (
-      <Router>
-        <Routes>
-            <Route path="/user/register" element={<UserRegister />} />,
-            <Route path="/user/login" element={<UserLogin />} />,
-            <Route path="/food-partner/register" element={<PartnerRegister />} />,
-            <Route path="/food-partner/login" element={<PartnerLogin />} />
-        </Routes>
-      </Router>
+    <Router>
+      <Routes>
+        <Route path="/user/register" element={<UserRegister />} />
+        <Route path="/user/login" element={<UserLogin />} />
+        <Route path="/food-partner/register" element={<PartnerRegister />} />
+        <Route path="/food-partner/login" element={<PartnerLogin />} />
+      </Routes>
+    </Router>
   )
 }
 

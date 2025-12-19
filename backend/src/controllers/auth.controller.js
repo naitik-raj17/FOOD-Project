@@ -106,7 +106,7 @@ function logoutUser(req,res){
 
 async function registerFoodPartner(req,res){
     try {
-        const {name,email,password} = req.body;
+        const {businessName,name,email,phone,password} = req.body;
         
         if(!name || !email || !password){
             return res.status(400).json({
@@ -127,7 +127,9 @@ async function registerFoodPartner(req,res){
         const foodPartner = await foodPartnerModel.create({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            businessName,
+            phone
         })
 
         const token = jwt.sign({
@@ -139,7 +141,9 @@ async function registerFoodPartner(req,res){
             foodPartner:{
                 _id: foodPartner._id,
                 email: foodPartner.email,
-                name: foodPartner.name
+                name: foodPartner.name,
+                businessName: foodPartner.businessName,
+                phone: foodPartner.phone
             }
         })
     } catch (error) {
