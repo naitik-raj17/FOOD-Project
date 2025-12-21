@@ -1,7 +1,32 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const PartnerRegister = () => {
+      const navigate = useNavigate();
+  const handleSubmit = async(e) =>{
+    e.preventDefault();
+    const businessName = e.target.businessName.value;
+    const name = e.target.contactName.value;
+    const phone = e.target.contactPhone.value;
+    const email = e.target.partnerEmail.value;
+    const password = e.target.partnerPassword.value;
+
+    const response = await axios.post("http://localhost:3000/api/auth/food-partner/register",{
+      businessName,
+      name,
+      phone,
+      email,
+      password
+    },{
+      withCredentials:true
+    });
+    console.log(response.data);
+    navigate("/create-food");
+  }
+
   return (
     <main className="auth-shell">
       <section className="auth-card">
@@ -11,28 +36,28 @@ const PartnerRegister = () => {
           <p className="auth-subtitle">List your menu and reach more hungry customers.</p>
         </header>
 
-        <form className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="field">
             <label htmlFor="businessName">Business name</label>
-            <input id="businessName" type="text" placeholder="Restaurant or brand name" />
+            <input id="businessName" type="text" name="businessName" placeholder="Restaurant or brand name" />
           </div>
           <div className="stacked">
             <div className="field">
               <label htmlFor="contactName">Contact name</label>
-              <input id="contactName" type="text" placeholder="Jane Smith" />
+              <input id="contactName" type="text" name="contactName" placeholder="Jane Smith" />
             </div>
             <div className="field">
               <label htmlFor="contactPhone">Phone</label>
-              <input id="contactPhone" type="tel" placeholder="+1 555 987 6543" />
+              <input id="contactPhone" type="tel" name="contactPhone" placeholder="+1 555 987 6543" />
             </div>
           </div>
           <div className="field">
             <label htmlFor="partnerEmail">Business email</label>
-            <input id="partnerEmail" type="email" placeholder="contact@restaurant.com" />
+            <input id="partnerEmail" type="email" name="partnerEmail" placeholder="contact@restaurant.com" />
           </div>
           <div className="field">
             <label htmlFor="partnerPassword">Password</label>
-            <input id="partnerPassword" type="password" placeholder="••••••••" />
+            <input id="partnerPassword" type="password" name="partnerPassword" placeholder="••••••••" />
           </div>
           <div className="field">
             <label htmlFor="partnerConfirm">Confirm password</label>

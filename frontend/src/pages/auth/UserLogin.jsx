@@ -1,7 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    const navigate = useNavigate();
+    const email = e.target.email.value;
+    const passwrod = e.target.password.value;
+
+    const response = await axios.post("http://localhost:3000/api/auth/user/login",{
+      email,
+      password
+    },{
+      withCredentials:true
+    });
+    console.log(response.data);
+    navigate("/");
+  };
   return (
     <main className="auth-shell">
       <section className="auth-card">
@@ -11,14 +28,14 @@ const UserLogin = () => {
           <p className="auth-subtitle">Sign in to pick up where you left off.</p>
         </header>
 
-        <form className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="field">
             <label htmlFor="userEmail">Email</label>
-            <input id="userEmail" type="email" placeholder="you@example.com" />
+            <input id="userEmail" type="email" name="email" placeholder="you@example.com" />
           </div>
           <div className="field">
             <label htmlFor="userPassword">Password</label>
-            <input id="userPassword" type="password" placeholder="••••••••" />
+            <input id="userPassword" type="password" name="password" placeholder="••••••••" />
           </div>
           <div className="helper">
             <span>Use your registered email and password.</span>
