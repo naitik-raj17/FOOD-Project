@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import './Home.css'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const [foodItems, setFoodItems] = useState([])
@@ -101,12 +102,12 @@ const Home = () => {
                   {truncateDescription(item.description, 2)}
                 </p>
               )}
-              <button
+              <Link
                 className="visit-store-btn"
-                onClick={() => handleVisitStore(item)}
+                to={`/food-partner/${item._id}`}
               >
                 Visit Store
-              </button>
+              </Link>
             </div>
           </div>
         </div>
