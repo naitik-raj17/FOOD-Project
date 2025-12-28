@@ -4,11 +4,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
+    const navigate = useNavigate();
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    const navigate = useNavigate();
+
     const email = e.target.email.value;
-    const passwrod = e.target.password.value;
+    const password = e.target.password.value;
 
     const response = await axios.post("http://localhost:3000/api/auth/user/login",{
       email,

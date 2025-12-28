@@ -38,7 +38,8 @@ async function createFood(req, res) {
                 _id: food._id,
                 name: food.name,
                 video: food.video,
-                description: food.description
+                description: food.description,
+                // foodPartner: food.foodPartner
             }
         });
     } catch (error) {
@@ -49,7 +50,7 @@ async function createFood(req, res) {
 
 async function getFoodItems(req, res) {
     try {
-        const foodItems = await foodModel.find({});
+        const foodItems = await foodModel.find({}).select('name video description foodPartner');
 
         res.status(200).json({
             message: "Food items fetched successfully",

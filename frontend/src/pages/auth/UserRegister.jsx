@@ -1,8 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
 
 const UserRegister = () => {
+  // const navigate = useNavigate();
   const handleSubmit = async (e)=>{
     e.preventDefault();
     const firstName = e.target.firstName.value;
@@ -11,12 +13,20 @@ const UserRegister = () => {
     const phone = e.target.userPhone.value;
     const password = e.target.userPassword.value;
 
-    await axios.post("http://localhost:3000/api/auth/user/register",{
-      fullName:firstName+ " "+ lastName,
+    try{
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/user/register",{
+      fullName:`${firstName}${lastName}`,
       email,
-      phone,
+      // phone,
       password
-    });
+    },
+    { withCredentials:true });
+    console.log(res.data);
+    }
+    catch(err){
+      console.error(err.response?.data|| err.message) ;
+    }
   }
   return (
     <main className="auth-shell">
@@ -31,11 +41,11 @@ const UserRegister = () => {
           <div className="stacked">
             <div className="field">
               <label htmlFor="firstName">First name</label>
-              <input id="firstName" type="text" placeholder="Alex" />
+              <input id="firstName" name="firstName" type="text" placeholder="Alex" />
             </div>
             <div className="field">
               <label htmlFor="lastName">Last name</label>
-              <input id="lastName" type="text" placeholder="Doe" />
+              <input id="lastName" name="lastName" type="text" placeholder="Doe" />
             </div>
           </div>
           <div className="field">

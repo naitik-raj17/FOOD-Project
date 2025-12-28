@@ -104,7 +104,7 @@ const Home = () => {
               )}
               <Link
                 className="visit-store-btn"
-                to={`/food-partner/${item._id}`}
+                to={`/food-partner/${item.foodPartner}`}
               >
                 Visit Store
               </Link>
