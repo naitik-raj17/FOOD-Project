@@ -10,46 +10,66 @@
   color-scheme: light dark;
 }
 
+/* Mobile-first: Simple background for performance */
 body {
   min-height: 100vh;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 18% 18%, rgba(239, 51, 64, 0.12), transparent 38%),
-    radial-gradient(circle at 82% 6%, rgba(248, 214, 208, 0.22), transparent 34%),
-    radial-gradient(circle at 50% 92%, rgba(210, 214, 192, 0.2), transparent 30%),
-    var(--bg);
+  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   letter-spacing: -0.01em;
   transition: background var(--transition), color var(--transition);
 }
 
+/* Desktop: Add gradient backgrounds */
+@media (min-width: 768px) {
+  body {
+    background: radial-gradient(circle at 18% 18%, rgba(239, 51, 64, 0.12), transparent 38%),
+      radial-gradient(circle at 82% 6%, rgba(248, 214, 208, 0.22), transparent 34%),
+      radial-gradient(circle at 50% 92%, rgba(210, 214, 192, 0.2), transparent 30%),
+      var(--bg);
+  }
+}
+
 a {
   color: inherit;
 }
 
+/* Mobile-first: Base styles for mobile */
 .auth-shell {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: calc(var(--spacing) * 2);
+  padding: 12px;
 }
 
 .auth-card {
-  width: min(420px, 100%);
+  width: 100%;
+  max-width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: calc(var(--spacing) * 2);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 20px 18px;
   display: flex;
   flex-direction: column;
   gap: calc(var(--spacing) * 1.5);
   transition: border-color var(--transition), transform var(--transition);
 }
 
-.auth-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
+/* Desktop enhancements */
+@media (min-width: 768px) {
+  .auth-shell {
+    padding: calc(var(--spacing) * 2);
+  }
+
+  .auth-card {
+    width: min(420px, 100%);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: calc(var(--spacing) * 2);
+  }
+
 }
 
 .auth-header {
@@ -66,15 +86,29 @@ a {
   font-weight: 600;
 }
 
+/* Mobile-first: Base styles */
 .auth-title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
+  line-height: 1.3;
 }
 
 .auth-subtitle {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Desktop enhancements */
+@media (min-width: 768px) {
+  .auth-title {
+    font-size: 26px;
+  }
+
+  .auth-subtitle {
+    font-size: 15px;
+  }
 }
 
 .auth-form {
@@ -95,15 +129,26 @@ a {
   font-size: 14px;
 }
 
+/* Mobile-first: Base styles with better touch targets */
 .field input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--input-bg);
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px; /* Prevents zoom on iOS */
+  -webkit-appearance: none;
+  appearance: none;
   transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+/* Desktop: Smaller padding and font size */
+@media (min-width: 768px) {
+  .field input {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
 }
 
 .field input::placeholder {
@@ -111,6 +156,67 @@ a {
 }
 
 .field input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+  background: var(--surface);
+}
+
+.field input[type="file"] {
+  cursor: pointer;
+}
+
+/* Mobile-first: Larger touch target for file button */
+.field input[type="file"]::file-selector-button {
+  padding: 10px 18px;
+  margin-right: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 44px; /* Better touch target */
+  transition: background var(--transition), border-color var(--transition);
+}
+
+@media (min-width: 768px) {
+  .field input[type="file"]::file-selector-button {
+    padding: 8px 16px;
+    min-height: auto;
+  }
+}
+
+
+/* Mobile-first: Base styles */
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 16px; /* Prevents zoom on iOS */
+  font-family: inherit;
+  resize: vertical;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+@media (min-width: 768px) {
+  .field textarea {
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+}
+
+.field textarea::placeholder {
+  color: var(--muted);
+}
+
+.field textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--focus-ring);
@@ -126,23 +232,57 @@ a {
   flex: 1;
 }
 
+/* Mobile-first: Larger touch target */
 .primary-btn {
   width: 100%;
-  padding: 13px 14px;
+  padding: 16px 18px;
   border: none;
   border-radius: 12px;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   color: #ffffff;
   font-weight: 700;
+  font-size: 16px;
   letter-spacing: 0.01em;
   cursor: pointer;
+  min-height: 48px; /* Better touch target */
   transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
   box-shadow: 0 12px 30px rgba(239, 51, 64, 0.24);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.primary-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 36px rgba(239, 51, 64, 0.3);
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .primary-btn {
+    padding: 13px 14px;
+    font-size: inherit;
+    min-height: auto;
+  }
+}
+
+/* Hover only on desktop (devices that support hover) */
+@media (hover: hover) and (pointer: fine) {
+  .primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 36px rgba(239, 51, 64, 0.3);
+  }
+
+  .auth-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .auth-footer a:hover {
+    color: var(--accent-strong);
+  }
+
+  .field input[type="file"]::file-selector-button:hover {
+    background: var(--input-bg);
+    border-color: var(--accent);
+  }
 }
 
 .primary-btn:active {
@@ -167,17 +307,26 @@ a {
   transition: color var(--transition);
 }
 
-.auth-footer a:hover {
-  color: var(--accent-strong);
-}
 
+/* Mobile-first: Base styles */
 .helper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
   color: var(--muted);
+  line-height: 1.5;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .helper {
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
 }
 
 .divider {
@@ -196,32 +345,56 @@ a {
   background: var(--divider);
 }
 
-@media (max-width: 768px) {
-  body {
-    background: var(--bg);
-    padding: var(--spacing);
-  }
 
-  .auth-card {
-    padding: 20px 18px;
-    border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: var(--border);
-  }
+/* Stacked always column on mobile, can be row on desktop */
+.stacked {
+  flex-direction: column;
+}
 
-  .auth-shell {
-    padding: 12px;
-  }
-
+@media (min-width: 768px) {
   .stacked {
-    flex-direction: column;
+    flex-direction: row;
   }
+}
 
-  .auth-title {
-    font-size: 22px;
+/* Mobile-first: Video preview styles */
+.video-preview-container {
+  margin-top: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.video-preview {
+  width: 100%;
+  max-height: 250px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .video-preview {
+    max-height: 200px;
   }
+}
 
-  .auth-subtitle {
+/* Mobile-first: Error message styles */
+.error-message {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(239, 51, 64, 0.1);
+  color: var(--accent);
+  font-size: 14px;
+  border: 1px solid rgba(239, 51, 64, 0.2);
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+  .error-message {
+    padding: 12px;
     font-size: 14px;
   }
 }
