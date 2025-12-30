@@ -7,6 +7,8 @@ import PartnerRegister from '../pages/auth/PartnerRegister'
 import Home from '../pages/general/Home'
 import Createfood from '../pages/food-partner/CreateFood'
 import Profile from '../pages/food-partner/Profile'
+import BottomNav from '../components/BottomNav'
+import Saved from '../pages/general/Saved'
 
 
 const AppRoutes = () => {
