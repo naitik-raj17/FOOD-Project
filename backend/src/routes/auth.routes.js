@@ -12,4 +12,8 @@ router.post('/food-partner/register',authController.registerFoodPartner)
 router.post('/food-partner/login',authController.loginFoodPartner)
 router.get('/food-partner/logout',authController.logoutFoodPartner)
 
+router.post('/delivery-partner/register',authController.registerDeliveryBoy);
+router.post('/delivery-partner/login',authController.loginDeliveryBoy);
+router.post('/delivery-partner/logout',authController.logoutDeliveryBoy)
+
 module.exports=router;
