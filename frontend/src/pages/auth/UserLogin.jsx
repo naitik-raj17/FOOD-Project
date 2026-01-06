@@ -93,7 +93,7 @@ function UserLogin() {
 
 
             <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSignIn} disabled={loading}>
-                {loading?<ClipLoader size={20} color='white'/>:"Sign In"}
+                Sign In
             
             </button>
             {err && <p className='text-red-500 text-center my-[10px]'>*{err}</p>}

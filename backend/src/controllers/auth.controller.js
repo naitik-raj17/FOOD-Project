@@ -3,11 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const foodPartnerModel = require("../models/foodpartner.model");
 const DeliveryModel = require('../models/deliveryboy.model');
+const { sendOtpMail } = require("../utils/mail");
 
 async function registerUser(req,res){
     try {
-        const{fullName,email,password,mobile} = req.body;
-        if(!fullName || !email || !password){
+        const{fullName,email,password,mobile,role} = req.body;
+        if(!fullName || !email || !password|| !role){
             return res.status(400).json({
                 message: "All fields are required"
             })
@@ -36,7 +37,8 @@ async function registerUser(req,res){
             fullName,
             email,
             mobile,
-            password: hashedPassword
+            password: hashedPassword,
+            role
         })
 
         const token = await jwt.sign({
@@ -342,14 +344,72 @@ async function loginDeliveryBoy(req,res){
 }
 
 
-
-function logoutDeliveryBoy(req,res){
+async function logoutDeliveryBoy(req,res){
     try{res.clearCookie("token");
     res.status(200).json({
         message:"DeliveryBoy logged out successfully"
     });}
     catch(err){
         return res.status(500).json(`logout error ${error}`)
+    }
+}
+
+async function sendOtp(req,res){
+    try{
+        const {email}=req.body
+        const user = await userModel.findOne({email})
+        if(!user){
+            return res.status(400).json({message:"User does not exist."})
+        }
+        const otp = Math.floor(1000 +Math.random()*9000).toString()
+        user.resetOtp = otp
+        user.otpExpires=Date.now()+5*60*1000
+        user.isOtpVerified=false
+        await user.save()
+        await sendOtpMail(email,otp)
+        return res.status(200).json({message: "otp sent successfully"})
+    }
+    catch(error){
+        return res.status(500).json(`message:"send otp error ${error}`)
+    }
+}
+
+async function verifyOtp(req,res){
+    try{
+        const {email,otp} = req.body;
+        const user = await userModel.findOne({email})
+        if(!user || user.resetOtp!=otp || user.otpExpires<Date.now()){
+            return res.status(400).json({message:"invalid/expired otp"})
+        }
+        user.isOtpVerified=true
+        user.resetOtp=undefined
+        user.otpExpires=undefined
+        await user.save()
+        return res.status(200).json({message:"otp verify successfully"})
+
+    }
+    catch(error){
+        return res.status(500).json(`message:"verify otp error ${error}`)
+    }
+}
+
+async function resetPassword(req,res) {
+    try{
+        const {email,newPassword}= req.body
+        const user = await userModel.findOne({email})
+        if(!user || !user.isOtpVerified){
+            return res.status(400).json({
+                message:"otp verification required"
+            })
+        }
+        const hashedPassword = await bcrypt.hash(newPassword,10);
+        user.password=hashedPassword
+        user.isOtpVerified=false
+        await user.save()
+        return res.status(200).json({message:"otp verify successfull"})
+    }
+    catch(error){
+        return res.status(500).json(`otp verify error ${error}`)
     }
 }
 
@@ -362,5 +422,8 @@ module.exports = {
     logoutFoodPartner,
     registerDeliveryBoy,
     loginDeliveryBoy,
-    logoutDeliveryBoy
+    logoutDeliveryBoy,
+    sendOtp,
+    verifyOtp,
+    resetPassword
 }

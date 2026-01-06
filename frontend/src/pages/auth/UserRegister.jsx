@@ -30,7 +30,7 @@ function UserRegister() {
         setLoading(true)
         try {
             const result=await axios.post("http://localhost:3000/api/auth/user/register",{
-                fullName,email,password,mobile
+                fullName,email,password,mobile,role
             },{withCredentials:true})
             // dispatch(setUserData(result.data))
             setErr("")
@@ -117,8 +117,8 @@ function UserRegister() {
                     </div>
                 </div>
 
-            <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSignUp} disabled={loading}>
-                {loading?<ClipLoader size={20} color='white'/>:"Sign Up"}
+            <button className={`w-full font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSignUp} >
+                Sign Up
             
             </button>
             {err && <p className='text-red-500 text-center my-[10px]'>*{err}</p>}
@@ -128,7 +128,7 @@ function UserRegister() {
 <FcGoogle size={20}/>
 <span>Sign up with Google</span>
             </button>
-            <p className='text-center mt-6 cursor-pointer' onClick={()=>navigate("/signin")}>Already have an account ?  <span className='text-[#ff4d2d]'>Sign In</span></p>
+            <p className='text-center mt-6 cursor-pointer' onClick={()=>navigate("/user/login")}>Already have an account ?  <span className='text-[#ff4d2d]'>Sign In</span></p>
             </div>
         </div>
     )

@@ -7,6 +7,10 @@ router.post('/user/register',authController.registerUser)
 router.post('/user/login',authController.loginUser)
 router.get('/user/logout',authController.logoutUser)
 
+router.post('/user/send-otp',authController.sendOtp)
+router.post('/user/verify-otp',authController.verifyOtp)
+router.post('/user/reset-password',authController.resetPassword)
+
 
 router.post('/food-partner/register',authController.registerFoodPartner)
 router.post('/food-partner/login',authController.loginFoodPartner)

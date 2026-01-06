@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react'
 import {IoIosArrowRoundBack} from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
@@ -9,11 +10,51 @@ function ForgotPassword() {
     const navigate = useNavigate()
     const [newPassword,setNewPassword]=useState("")
     const [confirmPassword,setconfirmPassword]=useState("")
+
+    const handleSendOtp = async ()=>{
+      try{
+        const res = await axios.post("http://localhost:3000/api/auth/user/send-otp",{email},{
+          withCredentials:true
+        })
+        console.log(res)
+        setStep(2)
+      }
+      catch(error){
+        console.log(error)
+      }
+    }
+    const handleVerifyOtp = async ()=>{
+      try{
+        const res = await axios.post("http://localhost:3000/api/auth/user/verify-otp",{email,otp},{
+          withCredentials:true
+        })
+        console.log(res)
+        setStep(3)
+      }
+      catch(error){
+        console.log(error)
+      }
+    }
+    const handleResetPassword = async ()=>{
+      if(newPassword!=confirmPassword){
+        return null
+      }
+      try{
+        const res = await axios.post("http://localhost:3000/api/auth/user/reset-password",{email,newPassword},{
+          withCredentials:true
+        })
+        console.log(res)
+        navigate("/user/login")
+      }
+      catch(error){
+        console.log(error)
+      }
+    }
   return (
     <div className='flex w-full items-center justify-center min-h-screen p-4 bg-[#fff9f6] '>
       <div className='bg-white rounded-xl shadow-lg w-full max-w-md p-8'>
         <div className='flex items-center gap-4:mb-4'>
-          <IoIosArrowRoundBack size={30} className='text-[#ff4d2d] cursor-pointer' onClick={()=>navigate("/user/login")} />
+          <IoIosArrowRoundBack size={30} className='text-[#ff4d2d] cursor-pointer-' onClick={()=>navigate("/user/login")} />
           <h1 className='text-2xl font-bold text-center text-[#ff4d2d]'>Forgot Password</h1>
         </div>
 
@@ -26,7 +67,7 @@ function ForgotPassword() {
                 </div>
 
                 
-                <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200  bg-[#ff4d2d] hover:bg-gray-100'>
+                <button className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200  bg-[#ff4d2d] hover:bg-gray-100 cursor-pointer`} onClick={handleSendOtp} >
                   <span>Send Otp</span>
                                       </button>
            </div>}
@@ -40,7 +81,7 @@ function ForgotPassword() {
                 </div>
 
                 
-                <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200  bg-[#ff4d2d] hover:bg-gray-100'>
+                <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200  bg-[#ff4d2d] hover:bg-gray-100' onClick={handleVerifyOtp}>
                   <span>Verify</span>
                                       </button>
            </div>}
@@ -59,10 +100,12 @@ function ForgotPassword() {
                     <input type="email" className='w-full border-1px rounded-lg px-3 py-2 focus:outline-none ' placeholder='Enter Confirm Password' onChange={(e)=>setconfirmPassword(e.target.value)} value={confirmPassword} required/>
                 </div>
                 
-                <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200  bg-[#ff4d2d] hover:bg-gray-100'>
+                <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200  bg-[#ff4d2d] hover:bg-gray-100' onClick={handleResetPassword}>
                   <span>Reset Password</span>
                                       </button>
            </div>}
+
+
       </div>
     </div>
   )
