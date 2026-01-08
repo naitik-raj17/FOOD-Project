@@ -5,7 +5,7 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup,signInWithRedirect } from 'firebase/auth';
 // import { serverUrl } from '../App';
 // // import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../../../firebase';
@@ -43,33 +43,33 @@ function UserRegister() {
         }
      }
 
-     const handleGoogleAuth = async () => {
-        if(!mobile){
-            return alert("mobile no is required")
-        }
-        const provider = new GoogleAuthProvider()
-        const res = await signInWithPopup(auth,provider)
-        console.log(res)
+    //  const handleGoogleAuth = async () => {
+    //     if(!mobile){
+    //         return alert("mobile no is required")
+    //     }
+    //     const provider = new GoogleAuthProvider()
+    //     const res = await signInWithPopup(auth,provider)
+    //     console.log(res)
 
+    //  }
+     const handleGoogleAuth=async () => {
+        if(!mobile){
+          return setErr("mobile no is required")
+        }
+        const provider=new GoogleAuthProvider()
+        const result=await signInWithRedirect(auth,provider)
+  try {
+    const {data}=await axios.post("http://localhost:3000/api/auth/google-auth",{
+        fullName:result.user.displayName,
+        email:result.user.email,
+        role,
+        mobile
+    },{withCredentials:true})
+//    dispatch(setUserData(data))
+  } catch (error) {
+    console.log(error)
+  }
      }
-  //    const handleGoogleAuth=async () => {
-  //       if(!mobile){
-  //         return setErr("mobile no is required")
-  //       }
-  //       // const provider=new GoogleAuthProvider()
-  //       // const result=await signInWithPopup(auth,provider)
-  // try {
-  //   const {data}=await axios.post(`${serverUrl}/api/auth/google-auth`,{
-  //       fullName:result.user.displayName,
-  //       email:result.user.email,
-  //       role,
-  //       mobile
-  //   },{withCredentials:true})
-  //  dispatch(setUserData(data))
-  // } catch (error) {
-  //   console.log(error)
-  // }
-  //    }
     return (
         <div className='min-h-screen w-full flex items-center justify-center p-4 py-10 overflow-y-auto' style={{ backgroundColor: bgColor }}>
             <div className={`bg-white rounded-xl shadow-lg w-full max-w-md p-8 border-[1px] `} style={{

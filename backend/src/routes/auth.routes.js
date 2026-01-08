@@ -11,6 +11,7 @@ router.post('/user/send-otp',authController.sendOtp)
 router.post('/user/verify-otp',authController.verifyOtp)
 router.post('/user/reset-password',authController.resetPassword)
 
+router.post('/google-auth',authController.googleAuth)
 
 router.post('/food-partner/register',authController.registerFoodPartner)
 router.post('/food-partner/login',authController.loginFoodPartner)

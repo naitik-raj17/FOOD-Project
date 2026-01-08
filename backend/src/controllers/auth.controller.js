@@ -413,6 +413,34 @@ async function resetPassword(req,res) {
     }
 }
 
+async function googleAuth(req,res) {
+    try{
+        const {fullName,email,mobile,role}=req.body;
+        const user = await userModel.findOne({email})
+        if(!user){
+            user=await userModel.create({
+                fullName,email,mobile,role
+            })
+        }
+        const token = await jwt.sign({
+            id: user._id,
+        }, process.env.JWT_SECRET,{
+            expiresIn: "7d"
+        })
+        res.cookie("token",token,{
+            secure: false,
+            sameSite:"strict",
+            maxAge: 77*24*60*60*1000,
+            httpOnly:true
+        })
+        
+        return res.status(200).json(user)
+    }
+    catch(error){
+        return res.status(500).json(`googleAuth error${error}`)
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -425,5 +453,6 @@ module.exports = {
     logoutDeliveryBoy,
     sendOtp,
     verifyOtp,
-    resetPassword
+    resetPassword,
+    googleAuth
 }
