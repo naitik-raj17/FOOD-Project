@@ -1,14 +1,16 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect} from 'react';
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
-import { GoogleAuthProvider, signInWithPopup,signInWithRedirect } from 'firebase/auth';
+
+import {app,auth} from "./../../../firebase"
+import { getRedirectResult,GoogleAuthProvider, signInWithPopup,signInWithRedirect } from 'firebase/auth';
 // import { serverUrl } from '../App';
 // // import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../../../firebase';
+// import { auth } from '../../../firebase';
 // import { ClipLoader } from "react-spinners"
 // import { useDispatch } from 'react-redux';
 // import { setUserData } from '../redux/userSlice';
@@ -56,20 +58,59 @@ function UserRegister() {
         if(!mobile){
           return setErr("mobile no is required")
         }
+
+        localStorage.setItem("pendingRole",role);
+        localStorage.setItem("pendingMobile",mobile);
+
+        // const auth = getAuth();
         const provider=new GoogleAuthProvider()
-        const result=await signInWithRedirect(auth,provider)
-  try {
-    const {data}=await axios.post("http://localhost:3000/api/auth/google-auth",{
-        fullName:result.user.displayName,
-        email:result.user.email,
-        role,
-        mobile
-    },{withCredentials:true})
-//    dispatch(setUserData(data))
-  } catch (error) {
-    console.log(error)
-  }
-     }
+
+        await signInWithRedirect(auth,provider);
+         }
+        // const result=await signInWithPopup(auth,provider)
+//             try {
+//             const {data}=await axios.post("http://localhost:3000/api/auth/google-auth",{
+//                 fullName:result.user.displayName,
+//                 email:result.user.email,
+//                 role,
+//                 mobile
+//                 },{withCredentials:true});
+//                 console.log("Success",data);
+// //    dispatch(setUserData(data))
+//                 } catch (error) {
+//     console.log("Auth error",error.response?.data|| error.message);
+ 
+  useEffect(()=>{
+        const finishLogin = async() =>{
+            // const auth = getAuth();
+            try{
+                const result = await getRedirectResult(auth);
+                if(result){
+                    const savedRole = localStorage.getItem("pendingRole");
+                    const savedMobile = localStorage.getItem("pendingMobile");
+
+                    const {data} = await axios.post("http://localhost:3000/api/auth/google-auth",{
+                        fullName:result.user.displayName,
+                        email: result.user.email,
+                        role:savedRole,
+                        mobile: savedMobile
+                    },{
+                        withCredentials:true
+                    });
+
+                    console.log("Database updated",data);
+
+                    localStorage.clear();
+                    navigate("/");
+                }
+            }
+            catch(error){
+                console.error("Error returning from firebase",error);
+            }
+        };
+        finishLogin();
+  },[auth,navigate]);
+     
     return (
         <div className='min-h-screen w-full flex items-center justify-center p-4 py-10 overflow-y-auto' style={{ backgroundColor: bgColor }}>
             <div className={`bg-white rounded-xl shadow-lg w-full max-w-md p-8 border-[1px] `} style={{
