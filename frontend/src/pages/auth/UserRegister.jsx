@@ -8,6 +8,7 @@ import axios from "axios"
 
 import {app,auth} from "./../../../firebase"
 import { getRedirectResult,GoogleAuthProvider, signInWithPopup,signInWithRedirect } from 'firebase/auth';
+import { setUserData } from '../../redux/userSlice';
 // import { serverUrl } from '../App';
 // // import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 // import { auth } from '../../../firebase';
@@ -28,13 +29,14 @@ function UserRegister() {
     const [mobile,setMobile]=useState("")
     const [err,setErr]=useState("")
     const [loading,setLoading]=useState(false)
-    // const dispatch=useDispatch()
+    const dispatch=useDispatch()
      const handleSignUp=async () => {
         setLoading(true)
         try {
             const result=await axios.post("http://localhost:3000/api/auth/user/register",{
                 fullName,email,password,mobile,role
             },{withCredentials:true})
+            dispatch(setUserData(result.data))
             // dispatch(setUserData(result.data))
             setErr("")
             setLoading(false)
@@ -97,6 +99,7 @@ function UserRegister() {
                     },{
                         withCredentials:true
                     });
+                        dispatch(setUserData(data))
 
                     console.log("Database updated",data);
 
@@ -155,6 +158,8 @@ function UserRegister() {
                     <div className='flex gap-2'>
                         {["user", "owner", "deliveryBoy"].map((r) => (
                             <button
+                                key={r}
+                                type="button"
                                 className='flex-1 border rounded-lg px-3 py-2 text-center font-medium transition-colors cursor-pointer'
                                 onClick={()=>setRole(r)}
                                 style={

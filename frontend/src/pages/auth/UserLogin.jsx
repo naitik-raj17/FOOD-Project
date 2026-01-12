@@ -30,7 +30,7 @@ function UserLogin() {
             const result=await axios.post("http://localhost:3000/api/auth/user/login",{
                 email,password
             },{withCredentials:true})
-            // dispatch(setUserData(result.data))
+            dispatch(setUserData(result.data))
             setErr("")
             setLoading(false)
 
@@ -40,24 +40,24 @@ function UserLogin() {
         }
      }
 
-  //    const handleGoogleAuth=async () => {
-  //       if(!mobile){
-  //         return setErr("mobile no is required")
-  //       }
-  //       // const provider=new GoogleAuthProvider()
-  //       // const result=await signInWithPopup(auth,provider)
-  // try {
-  //   const {data}=await axios.post(`${serverUrl}/api/auth/google-auth`,{
-  //       fullName:result.user.displayName,
-  //       email:result.user.email,
-  //       role,
-  //       mobile
-  //   },{withCredentials:true})
-  //  dispatch(setUserData(data))
-  // } catch (error) {
-  //   console.log(error)
-  // }
-  //    }
+     const handleGoogleAuth=async () => {
+        if(!mobile){
+          return setErr("mobile no is required")
+        }
+        // const provider=new GoogleAuthProvider()
+        // const result=await signInWithPopup(auth,provider)
+  try {
+    const {data}=await axios.post(`${serverUrl}/api/auth/google-auth`,{
+        fullName:result.user.displayName,
+        email:result.user.email,
+        role,
+        mobile
+    },{withCredentials:true})
+   dispatch(setUserData(data))
+  } catch (error) {
+    console.log(error)
+  }
+     }
     return (
         <div className='min-h-screen w-full flex items-center justify-center p-4 py-10 overflow-y-auto' style={{ backgroundColor: bgColor }}>
             <div className={`bg-white rounded-xl shadow-lg w-full max-w-md p-8 `} style={{
@@ -99,7 +99,7 @@ function UserLogin() {
             {err && <p className='text-red-500 text-center my-[10px]'>*{err}</p>}
             
 
-            <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200 border-gray-400 hover:bg-gray-100'>
+            <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition cursor-pointer duration-200 border-gray-400 hover:bg-gray-100' onClick={handleGoogleAuth}>
 <FcGoogle size={20}/>
 <span>Sign In with Google</span>
             </button>
