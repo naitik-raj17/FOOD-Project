@@ -10,6 +10,7 @@ import Profile from '../pages/food-partner/Profile'
 import BottomNav from '../components/BottomNav'
 import Saved from '../pages/general/Saved'
 import ForgotPassword from '../pages/auth/forgot-password'
+import Explore from '../pages/general/Explore'
 
 
 
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         <Route path="/create-food" element={<Createfood/>}/>
         <Route path="/food-partner/:id" element={<Profile />} />
         <Route path="/forgot-password" element={<ForgotPassword/>} />
+        <Route path='/home' element={<Explore/>}/>
       </Routes>
     </Router>
   )
